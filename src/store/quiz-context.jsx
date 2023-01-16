@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const table = {
   sports: 21,
@@ -11,7 +12,10 @@ const API_ENDPOINT = "https://opentdb.com/api.php?";
 
 const AppContext = React.createContext();
 
+const TIME = 120;
+
 const AppProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [waiting, setWaiting] = useState(true);
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
@@ -26,7 +30,7 @@ const AppProvider = ({ children }) => {
     user: "",
     password: "",
   });
-  const [timer, setTimer] = useState(180);
+  const [timer, setTimer] = useState(TIME);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogin, setIslogin] = useState(false);
@@ -99,19 +103,25 @@ const AppProvider = ({ children }) => {
     const { user, password } = quiz;
     if (user === "admin" && password === "admin") {
       setIslogin(true);
+      // navigate to home
+      navigate("/home");
     }
-    console.log(isLogin);
   };
 
   // timer function
   const startTimer = () => {
-    setTimer(180);
+    setTimer(TIME);
     const interval = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
     if (timer === 0) {
       clearInterval(interval);
     }
+  };
+
+  const logoutHandler = () => {
+    setIslogin(false);
+    navigate("/");
   };
 
   useEffect(() => {
@@ -139,6 +149,8 @@ const AppProvider = ({ children }) => {
         handleLogin,
         timer,
         answered,
+        isLogin,
+        logoutHandler,
       }}
     >
       {children}
