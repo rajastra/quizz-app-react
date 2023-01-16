@@ -10,7 +10,7 @@ function App() {
       <MainNavigation />
       <main>
         <Routes>
-          <Route path="/" element={<Navigate replace to="/welcome" />} />
+          <Route path="/" element={<Navigate replace to="/home" />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<FormLogin />} />
         </Routes>

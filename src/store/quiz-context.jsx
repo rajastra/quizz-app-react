@@ -17,6 +17,7 @@ const AppProvider = ({ children }) => {
   const [questions, setQuestions] = useState([]);
   const [index, setIndex] = useState(0);
   const [correct, setCorrect] = useState(0);
+  const [answered, setAnswered] = useState(0);
   const [error, setError] = useState(false);
   const [quiz, setQuiz] = useState({
     amount: 10,
@@ -25,7 +26,7 @@ const AppProvider = ({ children }) => {
     user: "",
     password: "",
   });
-  const [timer, setTimer] = useState(360);
+  const [timer, setTimer] = useState(180);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogin, setIslogin] = useState(false);
@@ -60,6 +61,7 @@ const AppProvider = ({ children }) => {
   };
 
   const checkAnswer = (value) => {
+    setAnswered((oldState) => oldState + 1);
     if (value) {
       setCorrect((oldState) => oldState + 1);
     }
@@ -68,12 +70,14 @@ const AppProvider = ({ children }) => {
 
   const openModal = () => {
     setIsModalOpen(true);
+    setTimer(0);
   };
 
   const closeModal = () => {
     setWaiting(true);
     setCorrect(0);
     setIsModalOpen(false);
+    setAnswered(0);
   };
 
   const handleChange = (e) => {
@@ -101,6 +105,7 @@ const AppProvider = ({ children }) => {
 
   // timer function
   const startTimer = () => {
+    setTimer(180);
     const interval = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
@@ -133,6 +138,7 @@ const AppProvider = ({ children }) => {
         handleSubmit,
         handleLogin,
         timer,
+        answered,
       }}
     >
       {children}
