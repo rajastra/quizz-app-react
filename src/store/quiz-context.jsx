@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 const table = {
   sports: 21,
@@ -25,6 +25,7 @@ const AppProvider = ({ children }) => {
     user: "",
     password: "",
   });
+  const [timer, setTimer] = useState(360);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLogin, setIslogin] = useState(false);
@@ -66,7 +67,6 @@ const AppProvider = ({ children }) => {
   };
 
   const openModal = () => {
-    console.log("hello");
     setIsModalOpen(true);
   };
 
@@ -86,6 +86,7 @@ const AppProvider = ({ children }) => {
     e.preventDefault();
     const { amount, category, difficulty } = quiz;
     const url = `${API_ENDPOINT}amount=${amount}&category=${table[category]}&difficulty=${difficulty}&type=multiple`;
+    startTimer();
     fetchQuestions(url);
   };
 
@@ -97,6 +98,22 @@ const AppProvider = ({ children }) => {
     }
     console.log(isLogin);
   };
+
+  // timer function
+  const startTimer = () => {
+    const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+    if (timer === 0) {
+      clearInterval(interval);
+    }
+  };
+
+  useEffect(() => {
+    if (timer === 0) {
+      openModal();
+    }
+  }, [timer]);
 
   return (
     <AppContext.Provider
@@ -115,6 +132,7 @@ const AppProvider = ({ children }) => {
         handleChange,
         handleSubmit,
         handleLogin,
+        timer,
       }}
     >
       {children}

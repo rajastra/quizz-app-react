@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import FormLogin from "./components/FormLogin";
 import Home from "./components/Home";
 import MainNavigation from "./components/MainNavigation";
-import { useGlobalContext } from "./store/quiz-context";
 
 function App() {
   return (

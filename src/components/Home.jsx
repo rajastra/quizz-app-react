@@ -15,6 +15,7 @@ function Home() {
     error,
     nextQuestion,
     checkAnswer,
+    timer,
   } = useGlobalContext();
   if (waiting) {
     return <SetupForm />;
@@ -26,14 +27,29 @@ function Home() {
 
   const { question, incorrect_answers, correct_answer } = questions[index];
 
-  const answers = [...incorrect_answers];
-  const tempIndex = Math.floor(Math.random() * 4);
-  if (tempIndex === 3) {
-    answers.push(correct_answer);
-  } else {
-    answers.push(answers[tempIndex]);
-    answers[tempIndex] = correct_answer;
-  }
+  const answers = [...incorrect_answers, correct_answer];
+
+  // const tempIndex = Math.floor(Math.random() * 4);
+  // if (tempIndex === 3) {
+  //   answers.push(correct_answer);
+  // } else {
+  //   answers.push(answers[tempIndex]);
+  //   answers[tempIndex] = correct_answer;
+  // }
+
+  // randomize answer
+
+  const secondsToHms = (d) => {
+    d = Number(d);
+    let h = Math.floor(d / 3600);
+    let m = Math.floor((d % 3600) / 60);
+    let s = Math.floor((d % 3600) % 60);
+
+    let hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    let mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+    let sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    return hDisplay + mDisplay + sDisplay;
+  };
 
   return (
     <main>
@@ -42,6 +58,7 @@ function Home() {
         <p className="correct-answers">
           Correct answer :{correct}/{index}
         </p>
+        <p className="timer">timer : {secondsToHms(timer)}</p>
         <article className="container">
           <h2 dangerouslySetInnerHTML={{ __html: question }} />
           <div className="btn-container">
